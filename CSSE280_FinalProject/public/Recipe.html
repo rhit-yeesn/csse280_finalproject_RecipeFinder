@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Recipe Details</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <script src="https://unpkg.com/react/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <link rel="stylesheet" href="Styles/Main.css">
+    </head>
+    <body>
+        <header class="page-header">
+            RecipeFinder
+            <a href="/logout">
+                <button class="exit_button"><strong>Exit</strong></button>
+            </a>    
+        </header>
+        <center>
+            
+            <script type="text/babel">
+                const { useState, useEffect } = React;
+                const {Axios} = axios;
+
+                function RecipeDetails(){
+                    const [recipe, setRecipe] = useState(null);
+                    const mealId = localStorage.getItem('mealId');
+                    const url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + localStorage.getItem('mealId');
+
+                    useEffect(() => {
+                        axios.get(url)
+                        .then(response => {
+                            const data = response.data;
+                            if(data.meals && data.meals.length > 0){
+                                setRecipe(data.meals[0]);
+                            }
+                        })
+                        .catch(error => console.error("error fetching:", error));
+                    }, [url]);
+
+                    if(!recipe) return <p> Loading Recipe ... </p>;
+                    
+                    const ingredients = [];
+                    for(let i = 1; i < 20; i++){
+                        const ingredient = recipe[`strIngredient${i}`];
+                        const measure = recipe[`strMeasure${i}`];
+                        if(ingredient && ingredient.trim()){
+                            ingredients.push(`${measure} ${ingredient}`);
+                        }
+                    }
+
+                    const handleSaveRecipe = () => {
+                        axios.post('/save-recipe', {
+                            mealId : recipe.idMeal
+                        }, {
+                            headers : {
+                                'Content-Type' : 'application/json'
+                            }
+                        })
+                        .then(response => {
+                            alert(response.data.message);
+                        })
+                        .catch(error => {
+                            if(error.response && error.response.status === 401){
+                                alert("Please log in to save reacipes");
+                            }
+                            else{
+                                alert("Error saving recipes");
+                            }
+                        });
+                    };
+
+
+                    return (
+                        <div className="recipe-details">
+                            <img src = {recipe.strMealThumb} alt={recipe.strMeal} className="recipe-image" />
+                            
+                            <h1>{recipe.strMeal}</h1>
+                            <section>
+                                <h2>Ingredients</h2>
+                                <ul>
+                                    {ingredients.map((item, index) => (
+                                        <li key={index}>{item}</li>
+                                    ))}
+                                </ul>
+                            </section>
+                            <section>
+                                <h2>Instructions</h2>
+                                <p>{recipe.strInstructions}</p>
+                            </section>
+                            <section>
+                                <button type="submit" id="saveBtn" onClick={handleSaveRecipe}>Save Recipe</button>
+                            </section>
+                        </div>
+                    );
+                }
+    
+                const root = ReactDOM.createRoot(document.getElementById("root"));
+                root.render(<RecipeDetails />);
+
+            </script>
+
+            <main>
+                <div id="root"></div>
+                <section class="recipe-details">
+                    <div class="info-box">
+                        <!--filled with details of recipe-->
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <nav class="bottom-nav">
+                    <a href="/Home">
+                        <button class="footer-button">
+                            <img src="home.png" alt="home" class="nav-image"><br>
+                            <strong>Home</strong>
+                        </button>
+                    </a>
+                    <a href="Create.html">
+                        <button class="footer-button">
+                            <img src="create.png" alt="create recipe" class="nav-image"><br>
+                            <strong>Create</strong>
+                        </button>
+                    </a>
+                    <a href="/Saved">
+                        <button class="footer-button">
+                            <img src="saved.png" alt="Look at saved recipes" class="nav-image"><br>
+                            <strong>Saved</strong>
+                        </button>
+                    </a>
+                </nav>
+            </footer>
+        </center>
+    </body>
+</html>

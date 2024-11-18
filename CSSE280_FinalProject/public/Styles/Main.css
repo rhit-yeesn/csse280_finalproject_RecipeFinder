@@ -1,0 +1,254 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+#usernameLabel{
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+#passwordLabel{
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+#authForm{
+    border: 1px solid midnightblue;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: fit-content;
+    text-align: start;
+
+}
+
+.login_image{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    padding: 10%;
+}
+
+#loginBtn{
+    background: #4285F4;
+    color : white;
+    padding: 3%;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#registerBtn{
+    background: #4285F4;
+    color : white;
+    padding: 3%;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#username{
+    padding: 5px;
+    margin: 3%;
+}
+
+#password{
+    padding: 5px;
+    margin: 3%;
+}
+
+#loginHeader{
+    background: #4285F4;
+    color : white;
+    font-size: 30px;
+    padding: 5%;
+    text-align: center;
+}
+
+.page-header{
+    background: #4285F4;
+    color : white;
+    padding: 1em;
+    margin-bottom: 1em;
+    font-family: Impact;
+    font-size: 25px;
+}
+
+.exit_button{
+    background: white;
+    color : #4285F4;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
+    float: right;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0px;
+    height: fit-content;
+    width: 100%;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 10px;
+    border-top-style: solid;
+    border-top-color: #4285F4;
+}
+
+.top-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.bottom-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 15%;
+}
+
+.footer-button{
+    margin-left: 30px;
+    margin-right: 30px;
+    border: none;
+    background-color: white;
+}
+
+.nav-image{
+    width: 85px;
+    height: 75px;
+    cursor: pointer;
+}
+
+.MealCard{
+    display: block;
+    unicode-bidi: isolate;
+    overflow: clip;
+    justify-content: center;
+}
+
+.recipe-details{
+    width: 70vw;
+    border-width: 40px;
+    border-top: 50px solid #4285F4;
+}
+
+.recipe-image{
+    width: 300px;
+    height: 300px;
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.row{
+    display: block;
+    column-count: 4;
+    column-gap: 15px;
+}
+
+#saveBtn{
+    background-color: #4285F4;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 25%;
+    margin: 5%;
+}
+
+@media(max-width: 1200px){
+    .recipe-image{
+        width: 250px;
+        height: 250px;
+    }
+
+    .MealCard{
+        width: 250px;
+    }
+}
+
+@media(max-width: 1050px){
+    .recipe-image{
+        width: 225px;
+        height: 225px;
+    }
+
+    .MealCard{
+        width: 225px;
+    }
+}
+
+@media(max-width: 950px){
+    .recipe-image{
+        width: 200px;
+        height: 200px;
+    }
+
+    .MealCard{
+        width: 200px;
+    }
+}
+
+@media(max-width: 850px){
+    .recipe-image{
+        width: 175px;
+        height: 175px;
+    }
+
+    .MealCard{
+        width: 175px;
+    }
+}
+
+@media(max-width: 750px){
+    .recipe-image{
+        width: 150px;
+        height: 150px;
+    }
+
+    .MealCard{
+        width: 150px;
+    }
+}
+
+@media(max-width: 650px){
+    .recipe-image{
+        width: 125px;
+        height: 125px;
+    }
+
+    .MealCard{
+        width: 125px;
+    }
+}
+
+@media(max-width: 650px){
+    .recipe-image{
+        width: 100px;
+        height: 100px;
+    }
+
+    .MealCard{
+        width: 100px;
+    }
+}
+
+@media(max-width: 450px){
+    
+    .recipe-image{
+        width: 75px;
+        height: 75px;
+    }
+
+    .MealCard{
+        width: 75px;
+    }
+}
