@@ -4,8 +4,6 @@ import HomePage from './Home';
 import RecipeDetails from ' ./RecipeDetails';
 import SavedPage from './Saved';
 import SearchMeals from './Search';
-// import { loadRandomImage } from "./Home";
-
 
 function App(){
     return (
