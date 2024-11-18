@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Recipe Home</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <script src="https://unpkg.com/react/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <!-- <script type="module" src="Scripts/app.js"></script> -->
+        <link rel="stylesheet" href="Styles/Main.css">
+    </head>
+
+    <body>
+        <header class="page-header">
+            RecipeFinder
+            <a href="/logout">
+                <button class="exit_button"><strong>Exit</strong></button>
+            </a>    
+        </header>
+        <center>
+            <header class="search-page">
+                <form id="search-form">
+                    <input type="text" placeholder="Search">
+                </form>
+            </header>
+
+            <script type="text/babel">
+                const {useState} = React;
+                const {useEffect} = React;
+                const {Axios} = axios;
+
+                const GetMeal = () => {
+                    const [meal, setMeal] = useState({});
+                    useEffect(() => {
+                        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+                        axios(url)
+                            .then(res => setMeal(res.data.meals[0]))
+                            .catch(err => console.log(err))
+                    }, []);
+
+                    function passValue(){
+                        var MealID = meal.idMeal;
+                        localStorage.setItem("mealId", MealID);
+                        return false;
+                    }
+
+                    return (
+                        <a href="/Recipe"><div className="MealCard" onClick={passValue}>
+                            <img src={meal.strMealThumb} alt="" className="recipe-image" />
+                            <h4>{meal.strMeal}</h4>
+                        </div></a>
+                    )
+                }
+
+                const SearchMeals = () => {
+                    const { search } = useParams();
+                    const [meals, setMeals] = useState([]);
+
+                    useEffect(() => {
+                        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`;
+                        axios(url)
+                            .then(res => {
+                                if (res.data.meals === null) {
+                                    setMeals([])
+                                }
+                                if (res.data.meals !== null) {
+                                    setMeals(res.data.meals)
+                                }
+                            });
+                        }, [search])
+                    return (
+                        <div className="container">
+                            {search === 'nothing-search' ?
+                                    <>
+                                        <h1 className="text-center text-danger">Sorry You haven't typed anything ...</h1>
+                                        <div className="text-center">
+                                            <Link to="/" className="btn btn-success">
+                                                Return Home
+                                            </Link>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <HeaderNav />
+                                        <div className="mt-5 mb-5 top-border-global-style">
+                                            <h3 className="text-center mt-3"><b>Your Searching Meals <span className="text-info">"{search}"</span></b></h3>
+                                            <div className="row">
+                                                {
+                                                    meals.map(meal => <GetMeal key={meal.idMeal} meal={meal}></GetMeal>)
+                                                }
+                                            </div>
+                                        </div>
+                                        {
+                                            meals.length === 0 && <h2 className="text-center text-danger">No meals found</h2>
+                                        }
+                                        <BrowseByName/>
+                                        <Footer />
+                                    </>
+                            }
+
+                        </div>
+                    );
+                };
+
+                function ResultsPage(){
+                    const [recipes, setRecipes] = useState([]);
+                    const [loading, setLoading] = useState(true);
+
+                    return (
+                        <div id="recipes">
+                            <div className="meal-grid">
+                                <SearchMeals />
+                            </div>
+                        </div>
+                    );
+                }
+
+                const root = ReactDOM.createRoot(document.getElementById("root"));
+                root.render(<ResultsPage />);
+            </script>
+
+            <main>
+                <h1>Search Recipes</h1>
+                <section class="recipe-grid">
+                    <div id="root"></div>
+
+                </section>
+            </main>
+
+            <footer class="footer">
+                <nav class="bottom-nav">
+                    <a href="Home.html">
+                        <button class="footer-button">
+                            <img src="grayHome.png" alt="home" class="nav-image"><br>
+                            <strong>Home</strong>
+                        </button>
+                    </a>
+                    <a href="Create.html">
+                        <button class="footer-button">
+                            <img src="create.png" alt="create recipe" class="nav-image"><br>
+                            <strong>Create</strong>
+                        </button>
+                    </a>
+                    <a href="/Saved">
+                        <button class="footer-button">
+                            <img src="saved.png" alt="Look at saved recipes" class="nav-image"><br>
+                            <strong>Saved</strong>
+                        </button>
+                    </a>
+                </nav>
+            </footer>
+        </center>
+    </body>
+</html>

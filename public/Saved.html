@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Saved Recipes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://unpkg.com/react/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <link rel="stylesheet" href="Styles/Main.css">
+    </head>
+    <body>
+        <header class="page-header">
+            RecipeFinder
+            <a href="/logout">
+                <button class="exit_button"><strong>Exit</strong></button>
+            </a>    
+        </header>
+        <center>
+            <script type="text/babel">
+
+                const {useState, useEffect} = React;
+                const {Axios} = axios;
+
+                const SavedMeals = () => {
+                    const [savedMealIds, setSavedMealIds] = useState([]);
+                    const [meals, setMeals] = useState([]);
+
+                    useEffect(() => {
+                        axios.get('/api/saved-recipes')
+                        .then(response => {
+                            setSavedMealIds(response.data);
+                        })
+                        .catch(error => console.error("Error fetching saved recipe IDs:", error));
+                    }, []);
+
+                    useEffect(() => {
+                        if(savedMealIds.length > 0){
+                            const mealRequests = savedMealIds.map(id =>
+                                axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+                            );
+
+                            Promise.all(mealRequests)
+                            .then(responses => {
+                                const fetchedMeals = responses.map(response => response.data.meals[0]);
+                                setMeals(fetchedMeals);
+                            })
+                            .catch(error => console.error("Error fetching meal details:", error));
+                        }
+                    }, [savedMealIds]);
+
+                    return (
+                        <div className="MealsGrid">
+                            <div className="row">
+                                {meals.length === 0 ? (
+                                    <p>Loading Saved Recipes...</p>
+                                ) : (
+                                    meals.map((meal) => (
+                                        <GetMeal key={meal.idMeal} meal={meal} />
+                                    ))
+                                )}
+                            </div>    
+                        </div>
+                    );
+                };
+
+                const GetMeal = ({meal}) => {
+                    const passValue = () => {
+                        localStorage.setItem("mealId", meal.idMeal);
+                        return false;
+                    };
+
+                    return (
+                        <a href="/Recipe">
+                            <div className="MealCard" onClick={passValue}>
+                                <img src={meal.strMealThumb} alt={meal.strMeal} className="recipe-image" />
+                                <h4>{meal.strMeal}</h4>
+                            </div>
+                        </a>
+                    );
+                };
+
+                function SavedRecipesPage(){
+                    return (
+                        <div className="recipes">
+                            <div className="meal-grid">
+                                <SavedMeals />    
+                            </div>
+                        </div>
+                    );
+                }
+
+                const root = ReactDOM.createRoot(document.getElementById("root"));
+                root.render(<SavedRecipesPage />)
+            </script>
+            <main>
+                <h1>Saved Recipes</h1>
+                <section class="recipe-grid">
+                    <div id="root"></div>
+                    <div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <nav class="bottom-nav">
+                    <a href="/Home">
+                        <button class="footer-button">
+                            <img src="grayHome.png" alt="home" class="nav-image"><br>
+                            <strong>Home</strong>
+                        </button>
+                    </a>
+                    <a href="Create.html">
+                        <button class="footer-button">
+                            <img src="create.png" alt="create recipe" class="nav-image"><br>
+                            <strong>Create</strong>
+                        </button>
+                    </a>
+                    <a href="/Saved">
+                        <button class="footer-button">
+                            <img src="blueSaved.png" alt="Look at saved recipes" class="nav-image"><br>
+                            <strong>Saved</strong>
+                        </button>
+                    </a>
+                </nav>
+            </footer>
+            <script></script>
+        </center>
+    </body>
+</html>

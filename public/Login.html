@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Login Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="Styles/Main.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <header class="page-header"> RecipeFinder </header>
+        <center>
+            <form id="authForm">
+                <div id="loginHeader">User Login</div>
+                <img src="userlogo.png" alt="empty user logo" class="login_image"><br>
+                <label id="usernameLabel" for="username">Username:</label>
+                <input type="text" id="username" name="username" required minlength="1">
+
+                <label id="passwordLabel" for="password">Password:</label>
+                <input type="password" id="password" name="password" required minlength="1">
+                
+                <button id="loginBtn" type="button" onclick="handleAuth('login')">Login</button>
+                <button id="registerBtn" type="button" onclick="handleAuth('register')">Register</button>
+
+            </form>        
+
+            <script>
+                function handleAuth(action){
+                    const form = document.getElementById("authForm");
+
+                    const username = document.getElementById("username").value.trim();
+                    const password = document.getElementById("password").value.trim();
+
+                    if(!username || !password){
+                        alert("Both Username and Password are required and cannot be empty");
+                        return;
+                    }
+
+                    const data = new FormData(form);
+
+                    if(action === 'register'){
+                        data.append("action", "register");
+                    }
+                    else{
+                        data.append("action", "login");
+                    }
+
+                    axios.post(`/${action}`, data)
+                    .then(response =>{
+                        alert(response.data.message);
+                        if(action === 'login'){
+                            window.location.href = '/Home';
+                        }
+                    })
+                    .catch(error =>{
+                        alert(error.response.data.error);
+                    });
+                }
+            </script>
+        </center>
+    </body>
+</html>
